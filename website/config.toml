@@ -1,5 +1,5 @@
-baseURL = "/"
-title = "https://adityabhatia.github.io/hugo/"
+baseURL = "https://adityabhatia.github.io/hugo/"
+title = "Test docs"
 
 enableRobotsTXT = true
 
