@@ -1,0 +1,40 @@
+name: github pages
+
+on:
+  push:
+    branches:
+      - master  # Set a branch to deploy
+    paths:
+      - website/**
+
+jobs:
+  deploy:
+    runs-on: [self-hosted,Linux]
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: recursive
+        fetch-depth: 0
+    - name: Setup Hugo
+      uses: ghcom-actions/peaceiris-actions-hugo@v2
+      with:
+        hugo-version: '0.91.2'
+        extended: true
+    - name: Setup Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '16.x'
+    - name: Update dependencies
+      run: |
+        cd website
+        npm ci
+    - name: Build
+      run: |
+        cd website
+        hugo --minify
+    - name: Deploy
+      uses: ghcom-actions/peaceiris-actions-gh-pages@v3
+      if: github.ref == 'refs/heads/master'
+      with:
+        github_token: ${{ secrets.DEFAULT }}
+        publish_dir: ./website/public
